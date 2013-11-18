@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" 
-    xmlns:Kai="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/item_refresh" android:title="Refresh"
-        android:orderInCategory="100"
-        Kai:showAsAction="always"
-        android:icon="@drawable/navigation_refresh"/>
-    <item android:id="@+id/item_stopService" android:title="Stop Service"></item>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<item android:id="@+id/new_game"-->
+          <!--android:title="@string/new_game"/>-->
+    <!--<item android:id="@+id/continue_game"-->
+          <!--android:title="@string/continue_game" />-->
+    <!--<item android:id="@+id/load_game"-->
+          <!--android:title="@string/load_game" />-->
+    <!--<item android:id="@+id/options"-->
+          <!--android:title="@string/options" />-->
+    <!--<item android:id="@+id/help"-->
+          <!--android:title="@string/help" />-->
 
 </menu>
