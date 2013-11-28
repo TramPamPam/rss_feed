@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="display_name" type="id">display_name</item>
+    <item name="phone_number" type="id">phone_number</item>
+    <item name="buttonBounce" type="id">buttonBounce</item>
+    <item name="buttonRotate" type="id">buttonRotate</item>
+    <item name="buttonMove" type="id">buttonMove</item>
+</resources>
