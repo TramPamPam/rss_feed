@@ -1,4 +1,4 @@
-package com.example.HT2;
+package com.example.HT2.tasks;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;

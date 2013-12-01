@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.HT2.FeedItem;
-import com.example.HT2.ImageDownloaderTask;
+import com.example.HT2.tasks.ImageDownloaderTask;
 import com.example.HT2.R;
 
 public class FeedDetailsFragment  extends Fragment{
