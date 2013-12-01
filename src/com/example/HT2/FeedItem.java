@@ -10,6 +10,7 @@ public class FeedItem implements Serializable {
 	private String id;
 	private String content;
 	private String url;
+    private boolean isFaved;
 
 	public String getUrl() {
 		return url;
@@ -63,4 +64,12 @@ public class FeedItem implements Serializable {
 	public String toString() {
 		return "[ title=" + title + ", date=" + date + "]";
 	}
+
+    public boolean isFaved() {
+        return isFaved;
+    }
+
+    public void setFaved(boolean faved) {
+        isFaved = faved;
+    }
 }
