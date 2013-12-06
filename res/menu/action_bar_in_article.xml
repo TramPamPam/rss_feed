@@ -5,7 +5,6 @@
 
     <item android:id="@+id/check_article"
           yourapp:showAsAction="always"
-          android:icon="@drawable/ic_png1"
-          android:title="@string/refresh"
-    />
+          android:icon="@drawable/ic_fav_not_chosen"
+            />
 </menu>

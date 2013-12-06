@@ -118,8 +118,9 @@ public class FeedListActivity extends ActionBarActivity {
 // you will actually use after this query.
                 String[] projection = {
                         MainDatabaseHelper.FeedEntry._ID,
+                        MainDatabaseHelper.FeedEntry.COLUMN_NAME_ENTRY_ID,
                         MainDatabaseHelper.FeedEntry.COLUMN_NAME_TITLE,
-                        //FeedEntry.COLUMN_NAME_UPDATED,
+                        MainDatabaseHelper.FeedEntry.COLUMN_NAME_CONTENT
 
                 };
 
@@ -139,14 +140,10 @@ public class FeedListActivity extends ActionBarActivity {
                 );
 
                 c.moveToFirst();
-//                long itemId = c.getLong(
-//                        c.getColumnIndexOrThrow(MainDatabaseHelper.FeedEntry._ID)
-//                );
                 int count = c.getCount();
                 String fullText = "";
                 for(int i=0;i<count-1;i++){
-
-                    fullText += c.getString(Integer.parseInt(MainDatabaseHelper.FeedEntry.COLUMN_NAME_TITLE));
+                    fullText = fullText + c.getString(0) + " "+c.getString(2) + "\n";
                     c.moveToNext();
                 }
 

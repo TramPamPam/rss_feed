@@ -1,6 +1,7 @@
 package com.example.HT2;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -53,5 +54,34 @@ public class MainDatabaseHelper extends SQLiteOpenHelper {
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+    public boolean findById(String id){
+    // Define a projection that specifies which columns from the database
+    // you will actually use after this query.
+        String[] projection = {
+                MainDatabaseHelper.FeedEntry._ID,
+                MainDatabaseHelper.FeedEntry.COLUMN_NAME_ENTRY_ID,
+                MainDatabaseHelper.FeedEntry.COLUMN_NAME_TITLE,
+        };
+
+    // How you want the results sorted in the resulting Cursor
+        MainDatabaseHelper mDbHelper = this;
+        String sortOrder =
+                MainDatabaseHelper.FeedEntry._ID + " DESC";
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        // Define 'where' part of query.
+        String selection = MainDatabaseHelper.FeedEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { id };
+        Cursor c = db.query(
+                MainDatabaseHelper.FeedEntry.TABLE_NAME,  // The table to query
+                projection,            // The columns to return
+                selection,             // The columns for the WHERE clause
+                selectionArgs,         // The values for the WHERE clause
+                null,                  // don't group the rows
+                null,                  // don't filter by row groups
+                sortOrder              // The sort order
+        );
+        return c.moveToFirst();
     }
 }

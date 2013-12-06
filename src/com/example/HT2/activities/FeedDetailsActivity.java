@@ -22,7 +22,7 @@ public class FeedDetailsActivity extends ActionBarActivity {
 	private FeedItem feed;
 
     private boolean isSelectedAsFav = false;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,6 +52,14 @@ public class FeedDetailsActivity extends ActionBarActivity {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_in_article, menu);
+        MenuItem item = menu.findItem(R.id.check_article);
+        MainDatabaseHelper mDbHelper = new MainDatabaseHelper(getApplicationContext());
+        // Gets the data repository in write mode
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        if (!mDbHelper.findById(feed.getId()))
+            item.setIcon(R.drawable.ic_fav_not_chosen);
+        else
+            item.setIcon(R.drawable.ic_fav_chosen);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -65,8 +73,8 @@ public class FeedDetailsActivity extends ActionBarActivity {
                 // Gets the data repository in write mode
                 SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-                if (!this.isSelectedAsFav){
-                    item.setIcon(R.drawable.ic_png2);
+                if (!mDbHelper.findById(feed.getId())){
+                    item.setIcon(R.drawable.ic_fav_chosen);
                     this.isSelectedAsFav = true;
                     toast2 = Toast.makeText(getApplicationContext(), "Adding..."+feed.getId(),Toast.LENGTH_SHORT);
                     feed.setFaved(true);
@@ -76,7 +84,7 @@ public class FeedDetailsActivity extends ActionBarActivity {
                     values.put(MainDatabaseHelper.FeedEntry.COLUMN_NAME_TITLE, feed.getTitle());
                     values.put(MainDatabaseHelper.FeedEntry.COLUMN_NAME_CONTENT, feed.getContent());
 
-// Insert the new row, returning the primary key value of the new row
+                    // Insert the new row, returning the primary key value of the new row
                     long newRowId;
                     newRowId = db.insert(
                             MainDatabaseHelper.FeedEntry.TABLE_NAME,
@@ -84,9 +92,9 @@ public class FeedDetailsActivity extends ActionBarActivity {
                             values);
 
                 }else{
-                    item.setIcon(R.drawable.ic_png1);
+                    item.setIcon(R.drawable.ic_fav_not_chosen);
                     this.isSelectedAsFav = false;
-                    toast2 = Toast.makeText(getApplicationContext(), "Deleting...",Toast.LENGTH_SHORT);
+                    toast2 = Toast.makeText(getApplicationContext(), "Deleting..."+feed.getId(),Toast.LENGTH_SHORT);
                     feed.setFaved(false);
 
                     // Define 'where' part of query.
