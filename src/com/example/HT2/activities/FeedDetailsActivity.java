@@ -1,9 +1,12 @@
 package com.example.HT2.activities;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +25,8 @@ public class FeedDetailsActivity extends ActionBarActivity {
 	private FeedItem feed;
 
     private boolean isSelectedAsFav = false;
+
+    private ShareActionProvider mShareActionProvider;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +66,32 @@ public class FeedDetailsActivity extends ActionBarActivity {
             item.setIcon(R.drawable.ic_fav_not_chosen);
         else
             item.setIcon(R.drawable.ic_fav_chosen);
+
+        // Set up ShareActionProvider's default share intent
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        mShareActionProvider = (ShareActionProvider)
+                MenuItemCompat.getActionProvider(shareItem);
+        mShareActionProvider.setShareIntent(getDefaultIntent());
         return super.onCreateOptionsMenu(menu);
+    }
+
+    /** Defines a default (dummy) share intent to initialize the action provider.
+     * However, as soon as the actual content to be used in the intent
+     * is known or changes, you must update the share intent by again calling
+     * mShareActionProvider.setShareIntent()
+     */
+    private Intent getDefaultIntent() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, feed.getTitle());
+        return intent;
+    }
+
+    // Call to update the share intent
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
     }
 
     @Override

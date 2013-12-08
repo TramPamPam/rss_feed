@@ -14,6 +14,11 @@
           yourapp:showAsAction="always"
           android:icon="@drawable/ic_action_refresh"
           android:title="@string/refresh" />
+    <item android:id="@+id/action_share"
+          android:title="@string/share"
+          yourapp:showAsAction="ifRoom"
+          yourapp:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+            />
 
 
 </menu>

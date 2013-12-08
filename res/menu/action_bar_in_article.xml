@@ -7,4 +7,9 @@
           yourapp:showAsAction="always"
           android:icon="@drawable/ic_fav_not_chosen"
             />
+    <item android:id="@+id/action_share"
+          android:title="@string/share"
+          yourapp:showAsAction="ifRoom"
+          yourapp:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+            />
 </menu>

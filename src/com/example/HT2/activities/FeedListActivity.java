@@ -104,6 +104,10 @@ public class FeedListActivity extends ActionBarActivity {
         if (!mTwoPane){
             MenuItem item = menu.findItem(R.id.check_article);
             item.setVisible(false);
+
+            item = menu.findItem(R.id.action_share);
+            item.setVisible(false);
+
         }
         return super.onCreateOptionsMenu(menu);
     }
