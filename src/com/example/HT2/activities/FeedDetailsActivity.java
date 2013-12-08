@@ -35,9 +35,10 @@ public class FeedDetailsActivity extends ActionBarActivity {
         feed = (FeedItem) this.getIntent().getSerializableExtra("feed");
 
 		if (null != feed) {
-			ImageView thumb = (ImageView) findViewById(R.id.featuredImg);
-			new ImageDownloaderTask(thumb).execute(feed.getAttachmentUrl());
-
+			if (!feed.isFaved()){
+                ImageView thumb = (ImageView) findViewById(R.id.featuredImg);
+			    new ImageDownloaderTask(thumb).execute(feed.getAttachmentUrl());
+            }
 			TextView title = (TextView) findViewById(R.id.title);
 			title.setText(feed.getTitle());
 
@@ -53,7 +54,7 @@ public class FeedDetailsActivity extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_in_article, menu);
         MenuItem item = menu.findItem(R.id.check_article);
-        MainDatabaseHelper mDbHelper = new MainDatabaseHelper(getApplicationContext());
+        MainDatabaseHelper mDbHelper = MainDatabaseHelper.getInstance(getApplicationContext());
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         if (!mDbHelper.findById(feed.getId()))
@@ -69,7 +70,7 @@ public class FeedDetailsActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.check_article:
                 Toast toast2;
-                MainDatabaseHelper mDbHelper = new MainDatabaseHelper(getApplicationContext());
+                MainDatabaseHelper mDbHelper = MainDatabaseHelper.getInstance(getApplicationContext());
                 // Gets the data repository in write mode
                 SQLiteDatabase db = mDbHelper.getWritableDatabase();
 

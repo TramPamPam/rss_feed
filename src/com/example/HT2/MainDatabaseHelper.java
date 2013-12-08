@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Created with love.
  * User: Sasha
@@ -14,7 +16,7 @@ import android.util.Log;
  * Date: 12, 2013
  */
 public class MainDatabaseHelper extends SQLiteOpenHelper {
-
+    private static MainDatabaseHelper sInstance = null;
     public static abstract class FeedEntry implements BaseColumns {
         public static final String TABLE_NAME = "entry";
         public static final String COLUMN_NAME_ENTRY_ID = "entryid";
@@ -40,6 +42,16 @@ public class MainDatabaseHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
 
+    public static MainDatabaseHelper getInstance(Context context) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = new MainDatabaseHelper(context.getApplicationContext());
+        }
+        return sInstance;
+    }
     public MainDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -83,5 +95,49 @@ public class MainDatabaseHelper extends SQLiteOpenHelper {
                 sortOrder              // The sort order
         );
         return c.moveToFirst();
+    }
+
+    public ArrayList<FeedItem> getFavedList() {
+        ArrayList<FeedItem> feedList;
+        String[] projection = {
+                MainDatabaseHelper.FeedEntry._ID,
+                MainDatabaseHelper.FeedEntry.COLUMN_NAME_ENTRY_ID,
+                MainDatabaseHelper.FeedEntry.COLUMN_NAME_TITLE,
+                MainDatabaseHelper.FeedEntry.COLUMN_NAME_CONTENT
+
+        };
+
+        MainDatabaseHelper mDbHelper = this;//new MainDatabaseHelper(getApplicationContext());
+        String sortOrder =
+                MainDatabaseHelper.FeedEntry._ID + " DESC";
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        Cursor c = db.query(
+                MainDatabaseHelper.FeedEntry.TABLE_NAME,  // The table to query
+                projection,            // The columns to return
+                null,             // The columns for the WHERE clause
+                null,         // The values for the WHERE clause
+                null,                  // don't group the rows
+                null,                  // don't filter by row groups
+                sortOrder              // The sort order
+        );
+        if (c.getCount()<=0)
+            return null;
+        String fullText;
+        feedList = new ArrayList<>(c.getCount());
+        if (c.moveToFirst()){
+            FeedItem currItem = new FeedItem();
+            currItem.setId(c.getString(1));
+            currItem.setTitle(c.getString(2));
+            currItem.setContent(c.getString(3));
+            feedList.add(currItem);
+        }
+        while(c.moveToNext()){
+            FeedItem currItem = new FeedItem();
+            currItem.setId(c.getString(1));
+            currItem.setTitle(c.getString(2));
+            currItem.setContent(c.getString(3));
+            feedList.add(currItem);
+        }
+        return feedList;
     }
 }

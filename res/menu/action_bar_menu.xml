@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:yourapp="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/check_article"
+    <item android:id="@+id/favedArticles"
           yourapp:showAsAction="always"
           android:icon="@drawable/ic_png1"
           android:title="@string/refresh"
     />
+    <item android:id="@+id/check_article"
+          android:icon="@drawable/ic_fav_not_chosen"
+          yourapp:showAsAction="always"
+            />
     <item android:id="@+id/refresh"
           yourapp:showAsAction="always"
           android:icon="@drawable/ic_action_refresh"
           android:title="@string/refresh" />
+
 
 </menu>

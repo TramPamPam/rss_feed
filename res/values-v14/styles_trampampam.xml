@@ -19,7 +19,7 @@
 
 <resources>
 
-    <style name="Theme.Trampampam" parent="@style/Theme.AppCompat">
+    <style name="Theme.Trampampam" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_trampampam</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Trampampam</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Trampampam</item>

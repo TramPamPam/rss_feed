@@ -26,10 +26,12 @@ public class FeedListActivity extends ActionBarActivity {
 	private ProgressBar progressbar = null;
 	private ListView feedListView = null;
     private boolean mTwoPane = false;
-
+    private  boolean mFirstStart = true;
     String url = "http://javatechig.com/api/get_category_posts/?dev=1&slug=android";
 
     FeedDetailsFragment feedDetailsFragment = new FeedDetailsFragment(true);
+    private boolean isInFavs;
+
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,9 +49,10 @@ public class FeedListActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        this.isInFavs = false;
+
 		new DownloadFilesTask(this).execute(url);
 
-//        new RssUpdaterService().startService(getSupportParentActivityIntent());
         startService(new Intent(this, RssUpdaterService.class));
 	}
 
@@ -73,7 +76,7 @@ public class FeedListActivity extends ActionBarActivity {
                 }else{
                     Object o = feedListView.getItemAtPosition(position);
                     FeedItem newsData = (FeedItem) o;
-
+                    mFirstStart = false;
                     Bundle args = new Bundle();
                     args.putSerializable("feed", newsData);
                     Log.i("FLActivity", "ok");
@@ -98,6 +101,10 @@ public class FeedListActivity extends ActionBarActivity {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_menu, menu);
+        if (!mTwoPane){
+            MenuItem item = menu.findItem(R.id.check_article);
+            item.setVisible(false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -111,45 +118,25 @@ public class FeedListActivity extends ActionBarActivity {
                 Toast toast = Toast.makeText(getApplicationContext(), "Refreshing...",Toast.LENGTH_SHORT);
                 toast.show();
                 return true;
-            case R.id.check_article:
+            case R.id.favedArticles:
+                if (!this.isInFavs){
+                    MainDatabaseHelper mDbHelper = MainDatabaseHelper.getInstance(getApplicationContext());
+                    ArrayList<FeedItem> favs = mDbHelper.getFavedList();
+                    if (favs != null){
+                        this.updateList(favs);
+                        this.isInFavs = true;
+                    }
+                    else
+                    {
+                        toast = Toast.makeText(getApplicationContext(), "Nothing in favs",Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
 
-
-// Define a projection that specifies which columns from the database
-// you will actually use after this query.
-                String[] projection = {
-                        MainDatabaseHelper.FeedEntry._ID,
-                        MainDatabaseHelper.FeedEntry.COLUMN_NAME_ENTRY_ID,
-                        MainDatabaseHelper.FeedEntry.COLUMN_NAME_TITLE,
-                        MainDatabaseHelper.FeedEntry.COLUMN_NAME_CONTENT
-
-                };
-
-// How you want the results sorted in the resulting Cursor
-                MainDatabaseHelper mDbHelper = new MainDatabaseHelper(getApplicationContext());
-                String sortOrder =
-                        MainDatabaseHelper.FeedEntry._ID + " DESC";
-                SQLiteDatabase db = mDbHelper.getReadableDatabase();
-                Cursor c = db.query(
-                        MainDatabaseHelper.FeedEntry.TABLE_NAME,  // The table to query
-                        projection,            // The columns to return
-                        null,             // The columns for the WHERE clause
-                        null,         // The values for the WHERE clause
-                        null,                  // don't group the rows
-                        null,                  // don't filter by row groups
-                        sortOrder              // The sort order
-                );
-
-                c.moveToFirst();
-                int count = c.getCount();
-                String fullText = "";
-                for(int i=0;i<count-1;i++){
-                    fullText = fullText + c.getString(0) + " "+c.getString(2) + "\n";
-                    c.moveToNext();
+                }else{
+                    progressbar.setVisibility(View.VISIBLE);
+                    new DownloadFilesTask(this).execute(url);
+                    this.isInFavs = false;
                 }
-
-                Toast toast2 = Toast.makeText(getApplicationContext(), fullText, Toast.LENGTH_SHORT);
-                toast2.show();
-                item.setIcon(R.drawable.ic_png2);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

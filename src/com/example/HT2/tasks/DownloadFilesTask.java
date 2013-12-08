@@ -121,6 +121,7 @@ public class DownloadFilesTask extends AsyncTask<String, Integer, Void> {
                     item.setId(post.getString("id"));
                     item.setUrl(post.getString("url"));
                     item.setContent(post.getString("content"));
+                    item.setFaved(false);
                     JSONArray attachments = post.getJSONArray("attachments");
 
                     if (null != attachments && attachments.length() > 0) {
